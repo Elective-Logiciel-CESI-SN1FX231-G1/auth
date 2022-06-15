@@ -2,9 +2,10 @@ import shortid from 'shortid'
 import { connection } from '../mysql'
 import { createHash } from 'crypto'
 import { RowDataPacket } from 'mysql2'
+import { User } from '../types'
 
 export default {
-  async addUser (user: any) {
+  async addUser (user: User) {
     if (!user.password) throw new Error("Column 'password' cannot be null")
     const hash = createHash('sha256')
     hash.update(user.password)
@@ -15,11 +16,11 @@ export default {
   },
   async getUser (_id:string) {
     const user = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role FROM users WHERE _id=?', [_id]))[0][0]
-    return user
+    return user as User
   },
   async getUsers () {
     const users = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role FROM users'))[0]
-    return users
+    return users as User[]
   },
   async editUser (_id:string, update: any) {
     const updates = Object.entries(update).filter(([key, value]) => ['firstname', 'lastname', 'phone', 'password'].includes(key))

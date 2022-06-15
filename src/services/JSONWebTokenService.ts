@@ -8,5 +8,8 @@ const publicKey = config.has('jwt.publicKeyFile') ? fs.readFileSync(config.get('
 export default {
   sign: function (payload: string | Buffer | object) {
     return jwt.sign(payload, privateKey, { algorithm: config.get('jwt.algorithm') })
+  },
+  verify: function (token: string) {
+    return jwt.verify(token, publicKey)
   }
 }

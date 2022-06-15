@@ -2,6 +2,7 @@ import mysql, { ConnectionOptions } from 'mysql2'
 import config from 'config'
 import UserService from './services/UserService'
 import shortid from 'shortid'
+import type { User } from './types'
 
 export const connection = mysql.createConnection({
   host: config.get('mysql.host'),
@@ -25,7 +26,7 @@ export async function connect () {
     UNIQUE (email)
   );`)
   if (config.has('auth.defaultUsers')) {
-    for (const user of config.get<Array<any>>('auth.defaultUsers')) {
+    for (const user of config.get<Array<User>>('auth.defaultUsers')) {
       try {
         await UserService.addUser(Object.assign({ password: shortid() }, user))
       } catch (error: any) {

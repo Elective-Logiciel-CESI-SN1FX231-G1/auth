@@ -11,11 +11,6 @@ export const login: Handler = async function (req, res) {
   res.send(user)
 }
 
-export const logout: Handler = async function (req, res) {
-
-}
-
 export default {
-  login,
-  logout
+  login
 }

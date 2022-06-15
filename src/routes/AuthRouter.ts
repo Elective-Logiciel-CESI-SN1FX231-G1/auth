@@ -4,6 +4,4 @@ const AuthRouter = express.Router()
 
 AuthRouter.post('/login', express.json(), AuthController.login)
 
-AuthRouter.get('/logout', AuthController.logout)
-
 export default AuthRouter

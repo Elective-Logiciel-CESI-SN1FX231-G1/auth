@@ -1,0 +1,7 @@
+[jwt]
+algorithm="RS256"
+privateKeyFile="private.key"
+publicKeyFile="public.key"
+
+[mysql]
+database="auth_production"

@@ -1,0 +1,4 @@
+[auth]
+defaultUsers=[
+  { email= "admin@test.com", firstname = "admin", lastname = "root", password = "root", phone = "0000000000", role = "admin" }
+]

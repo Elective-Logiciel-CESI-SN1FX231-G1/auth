@@ -14,6 +14,7 @@ export const login: Handler = async function (req, res) {
   if (!req.body.password) return res.status(400).send()
   if (!req.body.email) return res.status(400).send()
   const user = await AuthService.login(req.body)
+  if (!user) return res.status(400).send()
   const jwt = JSONWebTokenService.sign(user)
   // res.cookie('auth', jwt)
   res.send(jwt)
@@ -21,9 +22,10 @@ export const login: Handler = async function (req, res) {
 
 export const auth: Handler = function (req, res, next) {
   if (!req.headers.authorization?.startsWith('Bearer ')) return next()
-  const token = req.headers.authorization.substring(0, 7)
+  const token = req.headers.authorization.substring(7)
   const user = JSONWebTokenService.verify(token)
   req.user = user
+  next()
 }
 
 export const authNeeded: Handler = function (req, res, next) {

@@ -7,7 +7,7 @@ export default {
     const hash = createHash('sha256')
     hash.update(password)
     const user = (await mysql.query<RowDataPacket[]>('SELECT * FROM users WHERE email=? AND password=?', [email, hash.digest().toString()]))[0][0]
-    delete user.password
+    if (user) delete user.password
     return user
   }
 }

@@ -24,13 +24,12 @@ export default {
   },
   async editUser (_id:string, update: any) {
     const updates = Object.entries(update).filter(([key, value]) => ['firstname', 'lastname', 'phone', 'password'].includes(key))
-    updates.map(([key, value]) => {
-      if (key === 'password') {
+    updates.forEach((keyVal) => {
+      if (keyVal[0] === 'password') {
         const hash = createHash('sha256')
-        hash.update(value as string)
-        return ['password', hash.digest().toString()]
+        hash.update(keyVal[1] as string)
+        keyVal[1] = hash.digest().toString()
       }
-      return [key, value]
     })
     await connection.query(`UPDATE users SET ${updates.map(([key, value]) => key + ' = ? ').join(',')} WHERE _id=?`, updates.map(([key, value]) => value).concat(_id))
   },

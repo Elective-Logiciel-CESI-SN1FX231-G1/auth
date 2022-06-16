@@ -23,9 +23,13 @@ export const login: Handler = async function (req, res) {
 export const auth: Handler = function (req, res, next) {
   if (!req.headers.authorization?.startsWith('Bearer ')) return next()
   const token = req.headers.authorization.substring(7)
-  const user = JSONWebTokenService.verify(token)
-  req.user = user
-  next()
+  try {
+    const user = JSONWebTokenService.verify(token)
+    req.user = user
+    return next()
+  } catch (error) {
+    return res.status(400).send('invalid jwt signature')
+  }
 }
 
 export const authNeeded: Handler = function (req, res, next) {

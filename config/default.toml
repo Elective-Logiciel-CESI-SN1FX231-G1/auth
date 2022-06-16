@@ -9,7 +9,7 @@ defaultUsers=[
 
 [http]
 port=44000
-publicUrl="http://localhost:44000/"
+publicUrl="http://localhost:8080/auth"
 
 [mysql]
 host="localhost"

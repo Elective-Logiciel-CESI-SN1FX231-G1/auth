@@ -1,4 +1,4 @@
-import { Handler, Request } from 'express'
+import { Handler } from 'express'
 import AuthService from '../services/AuthService'
 import JSONWebTokenService from '../services/JSONWebTokenService'
 import { Role } from '../types'
@@ -15,18 +15,18 @@ export const login: Handler = async function (req, res) {
   if (!req.body.email) return res.status(400).send()
   const user = await AuthService.login(req.body)
   const jwt = JSONWebTokenService.sign(user)
-  res.cookie('auth', jwt)
-  res.send(user)
+  // res.cookie('auth', jwt)
+  res.send(jwt)
 }
 
-export const auth: Handler = function (req:Request, res, next) {
+export const auth: Handler = function (req, res, next) {
   if (!req.headers.authorization?.startsWith('Bearer ')) return next()
   const token = req.headers.authorization.substring(0, 7)
   const user = JSONWebTokenService.verify(token)
   req.user = user
 }
 
-export const authNeeded: Handler = function (req:Request, res, next) {
+export const authNeeded: Handler = function (req, res, next) {
   if (!req.user) return res.sendStatus(401)
   return next()
 }
@@ -40,8 +40,14 @@ export const restrictedToRoles = function (roles: Role | Array<Role>) : Handler 
   }
 }
 
+export const verify: Handler = function (req, res) {
+  if (!req.user) return res.sendStatus(401)
+  res.send(req.user)
+}
+
 export default {
   login,
+  verify,
   auth,
   authNeeded,
   restrictedToRoles

@@ -8,8 +8,8 @@ defaultUsers=[
 ]
 
 [http]
-port=8080
-publicUrl="http://localhost:8080/"
+port=44000
+publicUrl="http://localhost:44000/"
 
 [mysql]
 host="localhost"

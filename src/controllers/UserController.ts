@@ -2,6 +2,7 @@ import { Handler } from 'express'
 import UserService from '../services/UserService'
 
 export const create: Handler = async (req, res) => {
+  if (!['client', 'restaurateur', 'deliverer', 'developer'].includes(req.body.role) && req.user?.role !== 'admin') return res.sendStatus(403)
   try {
     const user = await UserService.addUser(req.body)
     res.send(user)
@@ -22,7 +23,7 @@ export const getOne: Handler = async (req, res) => {
 }
 
 export const modify: Handler = async (req, res) => {
-  if (req.user._id !== req.params.id) return res.sendStatus(403)
+  if (req.user?._id !== req.params.id) return res.sendStatus(403)
   await UserService.editUser(req.params.id, req.body)
   const updatedUser = await UserService.getUser(req.params.id)
   if (updatedUser) res.send(updatedUser)
@@ -30,7 +31,7 @@ export const modify: Handler = async (req, res) => {
 }
 
 export const remove: Handler = async (req, res) => {
-  if (req.user._id !== req.params.id) return res.sendStatus(403)
+  if (req.user?._id !== req.params.id) return res.sendStatus(403)
   await UserService.deleteUser(req.params.id)
   res.sendStatus(204)
 }

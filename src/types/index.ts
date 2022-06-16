@@ -1,7 +1,7 @@
 
 export type Role = 'client'| 'restaurateur'| 'deliverer'| 'developer'| 'commercial'| 'technician'| 'admin'
 
-export interface IUser {
+export interface User {
   _id: string,
   firstname: string,
   lastname: string,

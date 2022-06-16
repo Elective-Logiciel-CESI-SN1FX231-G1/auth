@@ -1,12 +1,12 @@
 import { Handler } from 'express'
 import AuthService from '../services/AuthService'
 import JSONWebTokenService from '../services/JSONWebTokenService'
-import { Role } from '../types'
+import { User, Role } from '../types'
 
 declare module 'express-serve-static-core' {
   // eslint-disable-next-line no-unused-vars
   interface Request {
-    user?: any
+    user?: User
   }
 }
 
@@ -25,7 +25,7 @@ export const auth: Handler = function (req, res, next) {
   const token = req.headers.authorization.substring(7)
   try {
     const user = JSONWebTokenService.verify(token)
-    req.user = user
+    req.user = user as User
     return next()
   } catch (error) {
     return res.status(400).send('invalid jwt signature')

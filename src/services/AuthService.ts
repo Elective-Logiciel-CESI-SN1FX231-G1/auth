@@ -12,7 +12,7 @@ export default {
       delete user.password
       await client.publish('auth/connection/success', JSON.stringify(user))
     } else {
-      await client.publish('auth/connection/fail', JSON.stringify([email]))
+      await client.publish('auth/connection/fail', JSON.stringify({ email }))
     }
     return user
   }

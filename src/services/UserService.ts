@@ -3,6 +3,7 @@ import { connection } from '../mysql'
 import { createHash } from 'crypto'
 import { RowDataPacket } from 'mysql2'
 import { User } from '../types'
+import client from '../mqtt'
 
 export default {
   async addUser (user: User) {
@@ -12,7 +13,9 @@ export default {
     const _id = shortid()
     await connection.query('INSERT INTO users (_id, firstname, lastname, email, password, phone, role) VALUES  (?, ?, ?, ?, ?, ?, ?)',
       [_id, user.firstname, user.lastname, user.email, hash.digest().toString(), user.phone, user.role])
-    return await this.getUser(_id)
+    const newUser = await this.getUser(_id)
+    await client.publish('auth/users/new', JSON.stringify(newUser))
+    return newUser
   },
   async getUser (_id:string) {
     const user = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role FROM users WHERE _id=?', [_id]))[0][0]
@@ -32,8 +35,12 @@ export default {
       }
     })
     await connection.query(`UPDATE users SET ${updates.map(([key, value]) => key + ' = ? ').join(',')} WHERE _id=?`, updates.map(([key, value]) => value).concat(_id))
+    const editedUser = await this.getUser(_id)
+    await client.publish('auth/users/edit', JSON.stringify(editedUser))
+    return editedUser
   },
   async deleteUser (_id:string) {
     await connection.query('DELETE FROM users WHERE _id=?', [_id])
+    await client.publish('auth/users/delete', JSON.stringify([_id]))
   }
 }

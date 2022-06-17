@@ -24,8 +24,7 @@ export const getOne: Handler = async (req, res) => {
 
 export const modify: Handler = async (req, res) => {
   if (req.user?._id !== req.params.id) return res.sendStatus(403)
-  await UserService.editUser(req.params.id, req.body)
-  const updatedUser = await UserService.getUser(req.params.id)
+  const updatedUser = await UserService.editUser(req.params.id, req.body)
   if (updatedUser) res.send(updatedUser)
   else res.sendStatus(404)
 }

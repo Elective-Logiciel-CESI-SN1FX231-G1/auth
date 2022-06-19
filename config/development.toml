@@ -1,4 +1,12 @@
 [auth]
 defaultUsers=[
-  { email= "admin@test.com", firstname = "admin", lastname = "root", password = "root", phone = "0000000000", role = "admin" }
+  { email= "client@test.com", firstname = "client", lastname = "root", password = "root", phone = "0000000000", role = "client" },
+  { email= "client2@test.com", firstname = "client2", lastname = "root", password = "root", phone = "0000000000", role = "client" },
+  { email= "restaurateur@test.com", firstname = "restaurateur", lastname = "root", password = "root", phone = "0000000000", role = "restaurateur" },
+  { email= "restaurateur2@test.com", firstname = "restaurateur2", lastname = "root", password = "root", phone = "0000000000", role = "restaurateur" },
+  { email= "deliverer@test.com", firstname = "deliverer", lastname = "root", password = "root", phone = "0000000000", role = "deliverer" },
+  { email= "deliverer2@test.com", firstname = "deliverer2", lastname = "root", password = "root", phone = "0000000000", role = "deliverer" },
+  { email= "developer@test.com", firstname = "developer", lastname = "root", password = "root", phone = "0000000000", role = "developer" },
+  { email= "commercial@test.com", firstname = "commercial", lastname = "root", password = "root", phone = "0000000000", role = "commercial" },
+  { email= "technician@test.com", firstname = "technician", lastname = "root", password = "root", phone = "0000000000", role = "technician" }
 ]

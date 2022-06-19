@@ -21,9 +21,30 @@ export default {
     const user = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role FROM users WHERE _id=?', [_id]))[0][0]
     return user as User
   },
-  async getUsers () {
-    const users = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role FROM users'))[0]
-    return users as User[]
+  async getUsers ({
+    pagination, sort
+  }:{
+    pagination?:{size:number, skip:number},
+    sort?:{key:string, direction:string}
+  }) {
+    console.log(sort)
+    const users = (await connection.query<RowDataPacket[]>(`
+      SELECT _id, firstname, lastname, email, phone, role 
+      FROM users 
+      ORDER BY ${sort?.key || '_id'} ${sort?.direction || 'DESC'}
+      LIMIT ? OFFSET ?
+    `,
+    [
+      // ,
+      pagination?.size || 10, pagination?.skip || 0
+    ]))[0]
+    const count = (await connection.query<RowDataPacket[]>(`
+      SELECT COUNT(*) AS count FROM users
+    `))[0][0].count
+    return {
+      count: count as number,
+      users: users as User[]
+    }
   },
   async editUser (_id:string, update: any) {
     const updates = Object.entries(update).filter(([key, value]) => ['firstname', 'lastname', 'phone', 'password'].includes(key))

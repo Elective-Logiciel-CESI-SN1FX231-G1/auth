@@ -1,6 +1,17 @@
 import { Handler } from 'express'
 import UserService from '../services/UserService'
 
+export const getAll: Handler = async (req, res) => {
+  const { count, users } = await UserService.getUsers({
+    pagination: req.pagination,
+    sort: req.sort
+  })
+  res.send({
+    count,
+    results: users
+  })
+}
+
 export const create: Handler = async (req, res) => {
   if (!['client', 'restaurateur', 'deliverer', 'developer'].includes(req.body.role) && req.user?.role !== 'admin') return res.sendStatus(403)
   try {
@@ -10,10 +21,6 @@ export const create: Handler = async (req, res) => {
     if (err.message) res.status(400).send(err.message)
     else throw err
   }
-}
-
-export const getAll: Handler = async (req, res) => {
-  res.send(await UserService.getUsers())
 }
 
 export const getOne: Handler = async (req, res) => {

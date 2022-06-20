@@ -54,7 +54,7 @@ export default {
         keyVal[1] = hash.digest().toString()
       }
     })
-    await connection.query(`UPDATE users SET ${updates.map(([key, value]) => key + ' = ? ').join(',')} WHERE _id=?`, updates.map(([key, value]) => value).concat(_id))
+    if (updates.length) await connection.query(`UPDATE users SET ${updates.map(([key, value]) => key + ' = ? ').join(',')} WHERE _id=?`, updates.map(([key, value]) => value).concat(_id))
     const editedUser = await this.getUser(_id)
     await client.publish('auth/users/edit', JSON.stringify(editedUser))
     return editedUser

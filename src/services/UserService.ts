@@ -27,7 +27,6 @@ export default {
     pagination?:{size:number, skip:number},
     sort?:{key:string, direction:string}
   }) {
-    console.log(sort)
     const users = (await connection.query<RowDataPacket[]>(`
       SELECT _id, firstname, lastname, email, phone, role 
       FROM users 

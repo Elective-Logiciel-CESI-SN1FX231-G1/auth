@@ -15,9 +15,12 @@ export const login: Handler = async function (req, res) {
   if (!req.body.email) return res.status(400).send()
   const user = await AuthService.login(req.body)
   if (!user) return res.status(400).send()
-  const jwt = JSONWebTokenService.sign(user)
+  const token = JSONWebTokenService.sign(user)
   // res.cookie('auth', jwt)
-  res.send(jwt)
+  res.send({
+    user,
+    token
+  })
 }
 
 export const auth: Handler = function (req, res, next) {

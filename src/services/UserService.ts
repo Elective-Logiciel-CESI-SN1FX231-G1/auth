@@ -18,7 +18,7 @@ export default {
     return newUser
   },
   async getUser (_id:string) {
-    const user = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role FROM users WHERE _id=?', [_id]))[0][0]
+    const user = (await connection.query<RowDataPacket[]>('SELECT _id, firstname, lastname, email, phone, role, ban FROM users WHERE _id=?', [_id]))[0][0]
     return user as User
   },
   async getUsers ({
@@ -28,7 +28,7 @@ export default {
     sort?:{key:string, direction:string}
   }) {
     const users = (await connection.query<RowDataPacket[]>(`
-      SELECT _id, firstname, lastname, email, phone, role 
+      SELECT _id, firstname, lastname, email, phone, role, ban 
       FROM users 
       ORDER BY ${sort?.key || '_id'} ${sort?.direction || 'DESC'}
       LIMIT ? OFFSET ?
@@ -46,7 +46,7 @@ export default {
     }
   },
   async editUser (_id:string, update: any) {
-    const updates = Object.entries(update).filter(([key, value]) => ['firstname', 'lastname', 'phone', 'password'].includes(key))
+    const updates = Object.entries(update).filter(([key, value]) => ['firstname', 'lastname', 'phone', 'password', 'ban'].includes(key))
     updates.forEach((keyVal) => {
       if (keyVal[0] === 'password') {
         const hash = createHash('sha256')

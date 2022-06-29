@@ -22,6 +22,7 @@ export async function connect () {
     password    VARCHAR(255) NOT NULL,
     phone       VARCHAR(255) NOT NULL,
     role        ENUM('client', 'restaurateur', 'deliverer', 'developer', 'commercial', 'technician', 'admin') NOT NULL,
+    ban         BOOLEAN DEFAULT FALSE,
     PRIMARY KEY (_id),
     UNIQUE (email)
   );`)

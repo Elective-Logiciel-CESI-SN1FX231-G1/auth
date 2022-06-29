@@ -8,5 +8,6 @@ export interface User {
   email: string,
   password: string,
   phone: string,
-  role: Role
+  role: Role,
+  ban: boolean
 }

@@ -4,7 +4,7 @@ const AuthRouter = express.Router()
 
 /**
  *
- * @api {POST} /auth/api/auth/ loginUser
+ * @api {POST} /auth/api/auth/login loginUser
  * @apiName loginUser
  * @apiGroup Auth
  *
@@ -18,7 +18,7 @@ const AuthRouter = express.Router()
  * }
  *
  * @apiSuccess {Object} user The requested user.
- * @apiSuccess {Object} token The user's token.
+ * @apiSuccess {String} token The user's token.
  *
  * @apiSuccessExample {json} Success-Response:
  * HTTP/1.1 200 OK
@@ -43,20 +43,10 @@ AuthRouter.post('/login', express.json(), AuthController.login)
 
 /**
  *
- * @api {POST} /auth/api/auth/ Verify User's connection
+ * @api {POST} /auth/api/auth/verify Verify User's connection
  * @apiName verifyUser
  * @apiGroup Auth
  *
- * @apiBody {Object} user The user to verify.
- *
- * @apiExample
- * {
- *          "email": "user1@example.com",
- *          "firstname": "user1",
- *          "lastname": "example",
- *          "role": "client",
- *          "phone": "0612345678"
- * }
  *
  * @apiSuccess {Object} user The verified user.
  *
@@ -76,5 +66,34 @@ AuthRouter.post('/login', express.json(), AuthController.login)
  */
 
 AuthRouter.get('/verify', authNeeded, AuthController.verify)
+
+/**
+ *
+ * @api {POST} /auth/api/auth/refresh Refresh User's connection
+ * @apiName refreshToken
+ * @apiGroup Auth
+ *
+ * @apiSuccess {Object} user The requested user.
+ * @apiSuccess {String} token The user's token.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "user":
+ *     {
+ *          "_id": "bqduhadqiusdhi",
+ *          "email": "user1@example.com",
+ *          "firstname": "user1",
+ *          "lastname": "example",
+ *          "role": "client",
+ *          "phone": "0612345678"
+ *     }
+ *     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+ * }
+ *
+ *
+ */
+
+AuthRouter.get('/refresh', authNeeded, AuthController.refresh)
 
 export default AuthRouter

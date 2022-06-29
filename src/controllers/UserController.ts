@@ -30,14 +30,14 @@ export const getOne: Handler = async (req, res) => {
 }
 
 export const modify: Handler = async (req, res) => {
-  if (req.user?._id !== req.params.id) return res.sendStatus(403)
+  if (req.user?._id !== req.params.id && req.user?.role !== 'commercial') return res.sendStatus(403)
   const updatedUser = await UserService.editUser(req.params.id, req.body)
   if (updatedUser) res.send(updatedUser)
   else res.sendStatus(404)
 }
 
 export const remove: Handler = async (req, res) => {
-  if (req.user?._id !== req.params.id) return res.sendStatus(403)
+  if (req.user?._id !== req.params.id && req.user?.role !== 'commercial') return res.sendStatus(403)
   await UserService.deleteUser(req.params.id)
   res.sendStatus(204)
 }

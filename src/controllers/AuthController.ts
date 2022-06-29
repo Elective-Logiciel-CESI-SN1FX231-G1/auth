@@ -1,6 +1,7 @@
 import { Handler } from 'express'
 import AuthService from '../services/AuthService'
 import JSONWebTokenService from '../services/JSONWebTokenService'
+import UserService from '../services/UserService'
 import { User, Role } from '../types'
 
 declare module 'express-serve-static-core' {
@@ -16,22 +17,23 @@ export const login: Handler = async function (req, res) {
   const user = await AuthService.login(req.body)
   if (!user) return res.status(400).send()
   const token = JSONWebTokenService.sign(user)
-  // res.cookie('auth', jwt)
   res.send({
     user,
     token
   })
 }
 
-export const auth: Handler = function (req, res, next) {
+export const auth: Handler = async function (req, res, next) {
   if (!req.headers.authorization?.startsWith('Bearer ')) return next()
   const token = req.headers.authorization.substring(7)
   try {
-    const user = JSONWebTokenService.verify(token)
-    req.user = user as User
+    const jwtUser = JSONWebTokenService.verify(token) as User
+    const user = await UserService.getUser(jwtUser._id)
+    if (!user || user.ban) return res.sendStatus(401)
+    req.user = user
     return next()
   } catch (error) {
-    return res.status(400).send('invalid jwt signature')
+    return res.status(401).send('invalid jwt signature')
   }
 }
 
@@ -54,10 +56,20 @@ export const verify: Handler = function (req, res) {
   res.send(req.user)
 }
 
+export const refresh: Handler = function (req, res) {
+  if (!req.user) return res.sendStatus(401)
+  const token = JSONWebTokenService.sign(req.user)
+  res.send({
+    user: req.user,
+    token
+  })
+}
+
 export default {
   login,
   verify,
   auth,
   authNeeded,
-  restrictedToRoles
+  restrictedToRoles,
+  refresh
 }

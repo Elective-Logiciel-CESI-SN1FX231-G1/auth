@@ -14,7 +14,9 @@ const UserRouter = express.Router()
  * @apiSuccess {Number} count The number of users
  * @apiSuccess {Array} results An array of users
  *
- *
+ * @apiQuery {Number} size=10 Number of elements per page.
+ * @apiQuery {Number} skip=0 Number of elements to skip.
+ * @apiQuery {Number} page=1 The page to get.
  *
  * @apiSuccessExample {json} Success-Response:
  * HTTP/1.1 200 OK

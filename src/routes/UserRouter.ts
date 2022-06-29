@@ -7,21 +7,22 @@ const UserRouter = express.Router()
 
 /**
  *
- * @api {GET} /api/users listUsers
+ * @api {GET} /auth/api/users listUsers
  * @apiName listUsers
  * @apiGroup Users
  *
- * @apiSuccess (200) {number} count The number of users
- * @apiSuccess (200) {Object[]} results An array of users
+ * @apiSuccess {Number} count The number of users
+ * @apiSuccess {Array} results An array of users
  *
  *
  *
  * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
  * {
  *     count: 2
  *     results : [
  *          {
- *               "_id": "bqduhadqiusdhi"
+ *               "_id": "bqduhadqiusdhi",
  *               "email": "user1@example.com",
  *               "firstname": "user1",
  *               "lastname": "example",
@@ -29,7 +30,7 @@ const UserRouter = express.Router()
  *               "phone": "0612345678"
  *          },
  *          {
- *               "_id": "bqdqsdzqdvdfi"
+ *               "_id": "bqdqsdzqdvdfi",
  *               "email": "user2@example.com",
  *               "firstname": "user2",
  *               "lastname": "example",
@@ -46,20 +47,21 @@ UserRouter.get('/', restrictedToRoles('commercial'), paginate, sort, UserControl
 
 /**
  *
- * @api {GET} /api/users/:id getUser
+ * @api {GET} /auth/api/users/:id getUser
  * @apiName getUser
  * @apiGroup Users
  *
- * @apiParam {String} id Unique ID of the user.
+ * @apiParam {String} id User's unique ID.
  *
  *
- * @apiSuccess (200) {Object} user The requested user
+ * @apiSuccess {Object} user The requested user
  *
  *
  *
  * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
  * {
- *     "_id": "bqduhadqiusdhi"
+ *     "_id": "bqduhadqiusdhi",
  *     "email": "user1@example.com",
  *     "firstname": "user1",
  *     "lastname": "example",
@@ -73,9 +75,98 @@ UserRouter.get('/', restrictedToRoles('commercial'), paginate, sort, UserControl
 
 UserRouter.get('/:id', UserController.getOne)
 
+/**
+ *
+ * @api {POST} /auth/api/users/ addUser
+ * @apiName addUser
+ * @apiGroup Users
+ *
+ * @apiBody {String} email Email of the user.
+ * @apiBody {String} firstname Firstname of the user.
+ * @apiBody {String} lastname Lastname of the user.
+ * @apiBody {String} role Role of the user.
+ * @apiBody {String} phone Phone number of the user.
+ *
+ * @apiExample
+ * {
+ *     "email": "user1@example.com",
+ *     "firstname": "user1",
+ *     "lastname": "example",
+ *     "role": "client",
+ *     "phone": "0612345678"
+ * }
+ *
+ * @apiSuccess {Object} user The requested user
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "_id": "bqduhadqiusdhi",
+ *     "email": "user1@example.com",
+ *     "firstname": "user1",
+ *     "lastname": "example",
+ *     "role": "client",
+ *     "phone": "0612345678"
+ * }
+ *
+ *
+ *
+ */
+
 UserRouter.post('/', express.json(), UserController.create)
 
+/**
+ *
+ * @api {PATCH} /auth/api/users/:id editUser
+ * @apiName editUser
+ * @apiGroup Users
+ *
+ * @apiParam {String} id User's unique ID.
+ *
+ * @apiBody {String} [email] Email of the user.
+ * @apiBody {String} [firstname] Firstname of the user.
+ * @apiBody {String} [lastname] Lastname of the user.
+ * @apiBody {String} [role] Role of the user.
+ * @apiBody {String} [phone] Phone number of the user.
+ *
+ * @apiExample
+ * {
+ *     "lastname": "exampleModified",
+ *     "role": "deliverer",
+ *     "phone": "0687654321"
+ * }
+ *
+ * @apiSuccess {Object} user The requested user
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * {
+ *     "_id": "bqduhadqiusdhi",
+ *     "email": "user1@example.com",
+ *     "firstname": "user1",
+ *     "lastname": "exampleModified",
+ *     "role": "deliverer",
+ *     "phone": "0687654321"
+ * }
+ *
+ *
+ *
+ */
+
 UserRouter.patch('/:id', authNeeded, express.json(), UserController.modify)
+
+/**
+ *
+ * @api {DELETE} /auth/api/users/:id deleteUser
+ * @apiName deleteUser
+ * @apiGroup Users
+ *
+ * @apiParam {String} id User's unique ID.
+ *
+ * @apiSuccessExample
+ * HTTP/1.1 204 OK
+ *
+ */
 
 UserRouter.delete('/:id', authNeeded, UserController.remove)
 

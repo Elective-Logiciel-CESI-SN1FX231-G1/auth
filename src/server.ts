@@ -1,15 +1,15 @@
 import type { Server } from 'http'
-import mongoose from 'mongoose'
+import { connect as mysqlConnect } from './mysql'
 import config from 'config'
 import app from './app'
-import { connect } from './mqtt'
+import { connect as mqttConnect } from './mqtt'
 let server: Server
 
 export default {
   start: async () => {
-    await mongoose.connect(config.get('mongo.url'))
-    console.log('Connected to mongodb')
-    await connect()
+    await mysqlConnect()
+    console.log('Connected to mysql')
+    await mqttConnect()
     console.log('Connected to mqtt')
     server = app.listen(config.get('http.port'))
     await new Promise(resolve => server.once('listening', resolve))
@@ -18,6 +18,5 @@ export default {
   stop: async () => {
     server.close()
     await new Promise(resolve => server.once('close', resolve))
-    await mongoose.disconnect()
   }
 }

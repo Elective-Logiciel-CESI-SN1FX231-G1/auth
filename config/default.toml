@@ -1,11 +1,21 @@
+[jwt]
+algorithm="HS256"
+secret="secret"
+expiresIn="10m"
 
+[auth]
+defaultUsers=[
+]
 
 [http]
-port=8080
-publicUrl="http://localhost:8080/"
+port=44000
+publicUrl="http://localhost:8080/auth"
 
-[mongo]
-url="mongodb://localhost:27017/auth-development"
+[mysql]
+host="localhost"
+user="root"
+password="root"
+database="auth_development"
 
 [mqtt]
 url="mqtt://localhost/"

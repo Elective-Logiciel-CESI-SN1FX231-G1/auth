@@ -2,12 +2,12 @@ import { Handler } from 'express'
 import AuthService from '../services/AuthService'
 import JSONWebTokenService from '../services/JSONWebTokenService'
 import UserService from '../services/UserService'
-import { User, Role } from '../types'
+import UserModel, { Role } from '../models/UserModel'
 
 declare module 'express-serve-static-core' {
   // eslint-disable-next-line no-unused-vars
   interface Request {
-    user?: User
+    user?: UserModel
   }
 }
 
@@ -27,7 +27,7 @@ export const auth: Handler = async function (req, res, next) {
   if (!req.headers.authorization?.startsWith('Bearer ')) return next()
   const token = req.headers.authorization.substring(7)
   try {
-    const jwtUser = JSONWebTokenService.verify(token) as User
+    const jwtUser = JSONWebTokenService.verify(token) as UserModel
     const user = await UserService.getUser(jwtUser._id)
     if (!user || user.ban) return res.sendStatus(401)
     req.user = user

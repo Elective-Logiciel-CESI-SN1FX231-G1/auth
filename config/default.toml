@@ -11,11 +11,8 @@ defaultUsers=[
 port=44000
 publicUrl="http://localhost:8080/auth"
 
-[mysql]
-host="localhost"
-user="root"
-password="root"
-database="auth_development"
+[sql]
+url="mysql://root:root@localhost:3306/auth_development"
 
 [mqtt]
 url="mqtt://localhost/"

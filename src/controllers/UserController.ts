@@ -13,7 +13,7 @@ export const getAll: Handler = async (req, res) => {
 }
 
 export const create: Handler = async (req, res) => {
-  if (!['client', 'restaurateur', 'deliverer', 'developer'].includes(req.body.role) && req.user?.role !== 'admin') return res.sendStatus(403)
+  if (!['client', 'restaurateur', 'deliverer', 'developer'].includes(req.body.role)) return res.sendStatus(403)
   try {
     const user = await UserService.addUser(req.body)
     res.send(user)

@@ -10,3 +10,6 @@ defaultUsers=[
   { email= "commercial@test.com", firstname = "commercial", lastname = "root", password = "root", phone = "0000000000", role = "commercial" },
   { email= "technician@test.com", firstname = "technician", lastname = "root", password = "root", phone = "0000000000", role = "technician" }
 ]
+
+[sql]
+url="sqlite://dev.db"

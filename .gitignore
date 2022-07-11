@@ -1,5 +1,6 @@
 apidoc/
 config/local-*
+*.db
 
 # Logs
 logs
